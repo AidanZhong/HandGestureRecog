@@ -24,9 +24,8 @@ gesture designed, should include distinguishable gestures, and use combination o
 writing on overleaf: https://www.overleaf.com/project/6863f6e4522e1b47839c8b1c
 
 ## 3/7/2025
-- [ ] start the git repository, work log, documents
-- [ ] write the script of extracting frames from video
-- [ ] data collection
+- [x] start the git repository, work log, documents
+- [x] write the script of extracting frames from video
+- [x] write the gesture design part into dissertation
 
-github: 
-git repo: 
+git repo: https://github.com/AidanZhong/HandGestureRecog.git
