@@ -21,7 +21,7 @@ supposed to do:
 - [x] start the writing on overleaf
 
 gesture designed, should include distinguishable gestures, and use combination of gestures to cover every basic commands on OS.
-writing on overleaf: https://www.overleaf.com/project/6863f6e4522e1b47839c8b1c
+writing on overleaf: https://www.overleaf.com/project/686799ae3e3952171e3ca758
 
 ## 3/7/2025
 - [x] start the git repository, work log, documents
@@ -29,3 +29,10 @@ writing on overleaf: https://www.overleaf.com/project/6863f6e4522e1b47839c8b1c
 - [x] write the gesture design part into dissertation
 
 git repo: https://github.com/AidanZhong/HandGestureRecog.git
+
+## 4/7/2025
+- [x] switch to correct template of dissertation using UoN's template
+- [x] fill the correct ethic check form
+- [x] fill the DMP(Data management plan)
+- [ ] data collection
+
