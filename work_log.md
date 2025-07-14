@@ -39,3 +39,16 @@ git repo: https://github.com/AidanZhong/HandGestureRecog.git
 - [x] fill the DMP(Data management plan)
 - [ ] data collection
 
+## 7/7/2025
+- [x] data collected from 4 people
+
+--------------------
+
+- [ ] more literature review
+- [ ] build the model
+- [ ] methodology
+
+
+write them down, which type is more demanded in industry in the future
+1. explainable deep learning, maybe for medical imaging for example, the MRIs, CTs, could be interpretable
+2. More VR/AR/MR based technology based on CV. 

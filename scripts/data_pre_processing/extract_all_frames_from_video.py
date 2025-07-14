@@ -56,6 +56,6 @@ def handle_videos(root_folder):
             extract_frames(video_path, output_dir)
 
 
-v_path = ['']
+v_path = ['../../data/dataset1']
 for v in v_path:
     handle_videos(v)
