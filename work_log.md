@@ -51,4 +51,5 @@ git repo: https://github.com/AidanZhong/HandGestureRecog.git
 
 write them down, which type is more demanded in industry in the future
 1. explainable deep learning, maybe for medical imaging for example, the MRIs, CTs, could be interpretable
-2. More VR/AR/MR based technology based on CV. 
+2. More VR/AR/MR based technology based on CV. For example stress monitoring, simulation training
+3. Maybe combine some of the SLAM technology and experience i had before
