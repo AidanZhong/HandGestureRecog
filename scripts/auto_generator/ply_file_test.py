@@ -7,11 +7,11 @@ import os
 
 import trimesh
 
-mesh = trimesh.load('handsOnly_REGISTRATIONS_r_l/01_01r.ply')
+mesh = trimesh.load('handsOnly_REGISTRATIONS_r_lm___POSES/01_01r.ply')
 print(mesh.vertices.shape)
 print(mesh.faces.shape)
 
-ply_dir = 'handsOnly_REGISTRATIONS_r_l'
+ply_dir = 'handsOnly_REGISTRATIONS_r_lm___POSES'
 obj_dir = 'ply2obj'
 os.makedirs(obj_dir, exist_ok=True)
 
