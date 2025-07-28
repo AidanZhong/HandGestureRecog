@@ -145,6 +145,9 @@ todo:
 - [ ] train the classifier model
 
 ### 28/7/2025
+produce and rendered the images, together with joint coordinates projected on the scene
 
+trained the model with the data provided before, and not using a heatmap because:
+![img_3.png](img_3.png)
 
 ## week 4
