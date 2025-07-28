@@ -143,3 +143,8 @@ RGB images, with list of 21 2D joint coordinates
 todo:
 - [ ] finish the 2D hand skeleton estimator
 - [ ] train the classifier model
+
+### 28/7/2025
+
+
+## week 4
