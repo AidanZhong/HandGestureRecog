@@ -141,7 +141,7 @@ RGB images, with list of 21 2D joint coordinates
 - [ ] finish the most part before 22nd August
 
 todo:
-- [ ] finish the 2D hand skeleton estimator
+- [x] finish the 2D hand skeleton estimator
 - [ ] train the classifier model
 
 ### 28/7/2025
@@ -151,3 +151,52 @@ trained the model with the data provided before, and not using a heatmap because
 ![img_3.png](img_3.png)
 
 ## week 4
+- [ ] add more real data as much as possible to train the model
+- [ ] adjust the parameter
+- [ ] train the classifier model
+
+### 29/7/2025
+the training is:
+Epoch [1/30] Loss: 0.017426 | PixelErr: 52.09px
+Epoch [2/30] Loss: 0.000486 | PixelErr: 14.07px
+Epoch [3/30] Loss: 0.000505 | PixelErr: 14.32px
+Epoch [4/30] Loss: 0.000513 | PixelErr: 14.42px
+Epoch [5/30] Loss: 0.000502 | PixelErr: 14.31px
+Epoch [6/30] Loss: 0.000503 | PixelErr: 14.32px
+Epoch [7/30] Loss: 0.000512 | PixelErr: 14.45px
+Epoch [8/30] Loss: 0.000573 | PixelErr: 15.35px
+Epoch [9/30] Loss: 0.000540 | PixelErr: 14.82px
+Epoch [10/30] Loss: 0.000532 | PixelErr: 14.57px
+Epoch [11/30] Loss: 0.000570 | PixelErr: 15.32px
+Epoch [12/30] Loss: 0.000552 | PixelErr: 15.01px
+Epoch [13/30] Loss: 0.000527 | PixelErr: 14.63px
+Epoch [14/30] Loss: 0.000599 | PixelErr: 15.70px
+Epoch [15/30] Loss: 0.000534 | PixelErr: 14.79px
+Epoch [16/30] Loss: 0.000536 | PixelErr: 14.78px
+Epoch [17/30] Loss: 0.000590 | PixelErr: 15.53px
+Epoch [18/30] Loss: 0.000553 | PixelErr: 14.99px
+Epoch [19/30] Loss: 0.000563 | PixelErr: 15.16px
+Epoch [20/30] Loss: 0.000547 | PixelErr: 14.86px
+Epoch [21/30] Loss: 0.000518 | PixelErr: 14.58px
+Epoch [22/30] Loss: 0.000600 | PixelErr: 15.65px
+Epoch [23/30] Loss: 0.000721 | PixelErr: 17.09px
+Epoch [24/30] Loss: 0.000530 | PixelErr: 14.68px
+Epoch [25/30] Loss: 0.000529 | PixelErr: 14.67px
+Epoch [26/30] Loss: 0.000540 | PixelErr: 14.82px
+Epoch [27/30] Loss: 0.000557 | PixelErr: 15.05px
+Epoch [28/30] Loss: 0.000526 | PixelErr: 14.68px
+Epoch [29/30] Loss: 0.000559 | PixelErr: 15.17px
+Epoch [30/30] Loss: 0.000533 | PixelErr: 14.68px
+
+and the result is like:
+![img_4.png](img_4.png)
+
+compare it to mediapipe:
+![img_5.png](img_5.png)
+
+It is obviously a underfitting, preditions collapse to center
+
+Fix:
+1. add more layer to the CNN
+2. use L1 loss instead of MSE
+
