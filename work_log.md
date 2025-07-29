@@ -200,3 +200,56 @@ Fix:
 1. add more layer to the CNN
 2. use L1 loss instead of MSE
 
+Second training:
+Epoch [1/30] Loss: 0.064925 | PixelErr: 50.26px
+average per-joint errors: [ 3.9973967 26.705473  27.248432  24.867817  23.510578  31.563313
+ 28.90828   16.655891   7.489602   2.437439  20.595049  24.107552
+ 23.574799   4.8416424 11.612806  14.282575 ]
+Epoch [2/30] Loss: 0.022725 | PixelErr: 18.22px
+Epoch [3/30] Loss: 0.020497 | PixelErr: 16.49px
+Epoch [4/30] Loss: 0.019946 | PixelErr: 16.05px
+Epoch [5/30] Loss: 0.019376 | PixelErr: 15.61px
+Epoch [6/30] Loss: 0.019375 | PixelErr: 15.61px
+average per-joint errors: [18.532616 18.13741  18.28887  16.75485  13.306751  9.479755  3.178226
+ 11.70709  17.754925 16.812092 15.542696 12.567462 12.140382 20.627869
+ 28.153027 22.073124]
+Epoch [7/30] Loss: 0.020885 | PixelErr: 16.79px
+Epoch [8/30] Loss: 0.019379 | PixelErr: 15.65px
+Epoch [9/30] Loss: 0.020005 | PixelErr: 16.11px
+Epoch [10/30] Loss: 0.018599 | PixelErr: 14.95px
+Epoch [11/30] Loss: 0.019391 | PixelErr: 15.56px
+average per-joint errors: [28.31903  21.965622 18.959606 19.26754  19.918459 21.574427 25.866482
+ 17.241495 16.252306 17.655918 17.346865 19.060806 26.459377 27.54717
+ 26.57983  24.667778]
+Epoch [12/30] Loss: 0.019592 | PixelErr: 15.76px
+Epoch [13/30] Loss: 0.018746 | PixelErr: 15.14px
+Epoch [14/30] Loss: 0.019511 | PixelErr: 15.69px
+Epoch [15/30] Loss: 0.018392 | PixelErr: 14.82px
+Epoch [16/30] Loss: 0.020408 | PixelErr: 16.42px
+average per-joint errors: [13.973732  11.844834   9.494566  15.128635  11.713075  12.615984
+ 15.752957  11.181747  14.080307  15.002577  12.833723  12.037804
+ 18.999287  14.6993065 15.73647   15.064739 ]
+Epoch [17/30] Loss: 0.018517 | PixelErr: 14.90px
+Epoch [18/30] Loss: 0.018476 | PixelErr: 14.90px
+Epoch [19/30] Loss: 0.018527 | PixelErr: 14.83px
+Epoch [20/30] Loss: 0.019110 | PixelErr: 15.45px
+Epoch [21/30] Loss: 0.018215 | PixelErr: 14.74px
+average per-joint errors: [ 9.254971  11.964071   9.864086   7.3815107  9.909962  10.759191
+ 15.726042   5.8388295  7.165771  10.764963   8.379828   9.714081
+  4.067054   7.4406934  6.7068377  6.37258  ]
+Epoch [22/30] Loss: 0.018761 | PixelErr: 15.10px
+Epoch [23/30] Loss: 0.017809 | PixelErr: 14.41px
+Epoch [24/30] Loss: 0.018313 | PixelErr: 14.79px
+Epoch [25/30] Loss: 0.018570 | PixelErr: 14.92px
+Epoch [26/30] Loss: 0.018200 | PixelErr: 14.67px
+average per-joint errors: [14.801151  14.317309  16.65722   16.446587  13.913852  14.520954
+ 19.78686   15.5315075 15.74345   18.361156  12.739169  12.823032
+ 11.992813  13.350641  13.6831    14.8945465]
+Epoch [27/30] Loss: 0.018703 | PixelErr: 15.10px
+Epoch [28/30] Loss: 0.018193 | PixelErr: 14.65px
+Epoch [29/30] Loss: 0.018362 | PixelErr: 14.83px
+Epoch [30/30] Loss: 0.018284 | PixelErr: 14.74px
+
+still bad
+![img_6.png](img_6.png)
+![img_7.png](img_7.png)
