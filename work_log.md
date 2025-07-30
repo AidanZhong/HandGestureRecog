@@ -156,6 +156,8 @@ trained the model with the data provided before, and not using a heatmap because
 - [ ] train the classifier model
 
 ### 29/7/2025
+
+-----------------------------
 the training is:
 Epoch [1/30] Loss: 0.017426 | PixelErr: 52.09px
 Epoch [2/30] Loss: 0.000486 | PixelErr: 14.07px
@@ -196,6 +198,7 @@ compare it to mediapipe:
 
 It is obviously a underfitting, preditions collapse to center
 
+-------------------------------------------
 Fix:
 1. add more layer to the CNN
 2. use L1 loss instead of MSE
@@ -253,3 +256,25 @@ Epoch [30/30] Loss: 0.018284 | PixelErr: 14.74px
 still bad
 ![img_6.png](img_6.png)
 ![img_7.png](img_7.png)
+
+------------------------------
+Fix:
+1. decrease learning rate
+2. try weight decay
+
+it is still not working
+
+Epoch [1/30] Loss: 0.354919 | PixelErr: 265.66px
+average per-joint errors: [ 32.469425  22.57381   22.465988  22.731922  56.753418 127.85109
+  29.650614  63.41272    6.906284  60.681427 240.09691   30.063156
+  86.62981   82.15129  166.06998   42.985886]
+Epoch [2/30] Loss: 0.027928 | PixelErr: 23.84px
+Epoch [3/30] Loss: 0.017775 | PixelErr: 14.28px
+Epoch [4/30] Loss: 0.017537 | PixelErr: 14.15px
+
+![img_8.png](img_8.png)
+
+### 30/7/2025
+
+1. use k-fold cross validation to tune the hyperparameters
+
