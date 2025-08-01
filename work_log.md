@@ -277,4 +277,6 @@ Epoch [4/30] Loss: 0.017537 | PixelErr: 14.15px
 ### 30/7/2025
 
 1. use k-fold cross validation to tune the hyperparameters
+2. regenerate the data with random scale, random rotation, random skin color, random background color, random lighting
+
 
