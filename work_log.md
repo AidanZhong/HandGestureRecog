@@ -280,3 +280,11 @@ Epoch [4/30] Loss: 0.017537 | PixelErr: 14.15px
 2. regenerate the data with random scale, random rotation, random skin color, random background color, random lighting
 
 
+### 12/7/2025
+27/8 not available
+
+goal: 
+1. software
+2. apply different models to classifier to compare
+3. project proposal, 6 pages, more methodology, write it like we WILL apply xxx
+4. report
