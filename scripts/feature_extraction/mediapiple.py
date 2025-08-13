@@ -12,12 +12,12 @@ import numpy as np
 
 # # Load image
 # image = cv2.imread('../../docs/gesture_design/img.png')
+# image = cv2.imread('../../scripts/auto_generator/ply2obj2img/01_01r.png')
 # image_rgb = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
 #
 # mp_hands = mp.solutions.hands
 # hands = mp_hands.Hands(static_image_mode=True,
-#                        max_num_hands=2,
-#                        min_detection_confidence=0.5)
+#                        max_num_hands=1)
 #
 # results = hands.process(image_rgb)
 # mp_drawing = mp.solutions.drawing_utils
@@ -62,8 +62,7 @@ def get_mediapipe_preds(img_path, save=False):
 
         mp_hands = mp.solutions.hands
         hands = mp_hands.Hands(static_image_mode=True,
-                               max_num_hands=2,
-                               min_detection_confidence=0.5)
+                               max_num_hands=1)
 
         results = hands.process(image_rgb)
         hands = []
@@ -78,16 +77,17 @@ def get_mediapipe_preds(img_path, save=False):
                 if save:
                     np.save(f'{img_path}.npy', coordinates, allow_pickle=True)
                     del coordinates
-                # else:
-                #     hands.append(coordinates)
+                else:
+                    hands.append(coordinates)
         else:
-            os.remove(img_path)
+            print('Can\t recognize hands')
+            # os.remove(img_path)
             return
         return hands
     except:
         print(img_path)
 
 
-if __name__ == '__main__':
-    dir = '../../data/data/dataset1/gesture1/s1'
-    extract_feature(dir)
+# if __name__ == '__main__':
+#     dir = '../../data/data/dataset2/gesture1/s1'
+#     extract_feature(dir)
