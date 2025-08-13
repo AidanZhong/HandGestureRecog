@@ -86,7 +86,7 @@ def extract_from_a_folder(root_folder):
 
 
 if __name__ == '__main__':
-    file = '../../data/dataset2/result/g1_00'
+    file = '../../data/dataset1/result/g1_00'
     v_path = [file]
     for v in v_path:
         extract_from_a_folder(v)

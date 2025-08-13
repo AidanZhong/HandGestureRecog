@@ -11,7 +11,7 @@ import tensorflow_hub as hub
 from matplotlib import pyplot as plt
 
 # Load the input image.
-image_path = '../../data/dataset2/result/g1_00/frame_00000.jpg'
+image_path = '../../data/dataset1/result/g1_00/frame_00000.jpg'
 image = tf.io.read_file(image_path)
 image = tf.compat.v1.image.decode_jpeg(image)
 image = tf.expand_dims(image, axis=0)

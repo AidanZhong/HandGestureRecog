@@ -89,5 +89,5 @@ def get_mediapipe_preds(img_path, save=False):
 
 
 # if __name__ == '__main__':
-#     dir = '../../data/data/dataset2/gesture1/s1'
+#     dir = '../../data/data/dataset1/gesture1/s1'
 #     extract_feature(dir)
