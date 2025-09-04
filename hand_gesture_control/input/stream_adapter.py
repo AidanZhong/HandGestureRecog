@@ -8,3 +8,6 @@ Created on 2025/9/4 12:28
 @description: adapts my detector outputs to Gesture event
 - Python 
 """
+def to_event(detector_output):
+    pass
+
