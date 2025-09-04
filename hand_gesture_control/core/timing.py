@@ -8,8 +8,8 @@ Created on 2025/9/4 12:25
 @description: debouncer, stopwatch and timing utilities
 - Python 
 """
-import time
 from collections import defaultdict
+from time import monotonic
 from typing import Optional
 
 
@@ -18,7 +18,7 @@ class Debouncer:
         self.last_called_times = defaultdict(float)
 
     def ok(self, key: str, min_dt: float):
-        current_time = time.time()
+        current_time = monotonic()
         if key not in self.last_called_times or (current_time - self.last_called_times[key]) >= min_dt:
             self.last_called_times[key] = current_time
             return True
@@ -40,7 +40,7 @@ class Stopwatch:
         """
         Reset the stopwatch to zero and start timing immediately.
         """
-        self.start_time = time.time()
+        self.start_time = monotonic()
         self.paused = False
         self.pause_time = None
         self.total_paused_time = 0.0
@@ -60,19 +60,19 @@ class Stopwatch:
             return self.pause_time - self.start_time - self.total_paused_time
         else:
             # Return current time minus start time, minus any paused time
-            return time.time() - self.start_time - self.total_paused_time
+            return monotonic() - self.start_time - self.total_paused_time
 
     def pause(self):
         """Pause the stopwatch"""
         if not self.paused and self.start_time is not None:
-            self.pause_time = time.time()
+            self.pause_time = monotonic()
             self.paused = True
 
     def resume(self):
         """Resume the stopwatch after pausing"""
         if self.paused and self.pause_time is not None:
             # Add the current pause duration to total paused time
-            self.total_paused_time += time.time() - self.pause_time
+            self.total_paused_time += monotonic() - self.pause_time
             self.paused = False
             self.pause_time = None
 

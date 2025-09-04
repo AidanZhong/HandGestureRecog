@@ -8,6 +8,14 @@ Created on 2025/9/4 12:28
 @description: adapts my detector outputs to Gesture event
 - Python 
 """
-def to_event(detector_output):
-    pass
+from time import monotonic
+
+from hand_gesture_control.core.types import Position2D, GestureEvent, GestureId
+
+
+def to_event(gesture:str, x, y, width, height):
+    pos = Position2D(x/width, y/height)
+    gid = GestureId(gesture)
+    event = GestureEvent(gid, pos, monotonic())
+    return event
 
