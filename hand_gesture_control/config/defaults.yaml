@@ -1,0 +1,7 @@
+ema_alpha: 0.35
+deadzone_eps: 0.01
+axis_ratio: 1.3
+motion_threshold: 0.02
+scroll_gain: 120
+tab_flick_threshold: 0.03
+debounce_seconds: 0.200
