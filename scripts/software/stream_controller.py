@@ -12,7 +12,7 @@ def open_camera(index=0, width=512, height=512):
     if sys.platform == 'darwin':
         cap = cv2.VideoCapture(index, cv2.CAP_AVFOUNDATION)
     else:
-        cap = cv2.VideoCapture(index)
+        cap = cv2.VideoCapture(index, cv2.CAP_DSHOW)
     cap.set(cv2.CAP_PROP_FRAME_WIDTH, width)
     cap.set(cv2.CAP_PROP_FRAME_HEIGHT, height)
     if not cap.isOpened():

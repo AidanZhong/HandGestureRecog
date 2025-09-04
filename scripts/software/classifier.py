@@ -42,12 +42,20 @@ def get_gesture(cap, model):
                 for hand_landmarks in results.multi_hand_landmarks:
                     coordinates = []
                     h, w, _ = image.shape
-                    for l in hand_landmarks.landmark:
+                    for idx, l in enumerate(hand_landmarks.landmark):
                         x, y = int(l.x * w), int(l.y * h)
                         coordinates.append((x, y))
+
+                        # draw it on the image
+                        cv2.circle(image, (x, y), 5, (255, 0, 0), cv2.FILLED)
+                        cv2.putText(image, str(idx), (x + 5, y - 5), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 0, 0), 1)
+
                     coordinates = np.array(coordinates)
                     coordinates = coordinates.flatten()
                     hands.append(coordinates)
+
+            if not hands:
+                continue
             preds = model.predict(np.array(hands))
             for i in preds:
                 pred_text += mapper[i]
@@ -56,5 +64,6 @@ def get_gesture(cap, model):
             cv2.imshow('gesture_recognition', image)
             if cv2.waitKey(5) & 0xFF == ord('q'):
                 break
-        except:
+        except Exception as e:
+            print(e)
             continue

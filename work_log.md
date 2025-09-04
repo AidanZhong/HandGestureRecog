@@ -288,3 +288,7 @@ goal:
 - [x] apply different models to classifier to compare 
 - [ ] project proposal, 6 pages, more methodology, write it like we WILL apply xxx
 - [ ] report
+
+### 3/9/2025
+![img_9.png](img_9.png)
+use 0 as the stable point
