@@ -28,13 +28,13 @@ class GestureRouter:
       4) mode exits
       5) update history
     """
-    def __init__(self, engine, rules, debouncer, cfg: RouterConfig = RouterConfig()):
+    def __init__(self, driver, rules, debouncer, cfg: RouterConfig = RouterConfig()):
         """
-        engine: ActionEngine facade (actions/engine.py)
+        driver: Action driver facade (actions/driver.py)
         rules:  module/object exposing axis_dominance, is_zoom_in, is_zoom_out, tab_flick
         debouncer: Debouncer instance
         """
-        self.engine = engine
+        self.driver = driver
         self.rules = rules
         self.db = debouncer
         self.cfg = cfg
@@ -61,47 +61,47 @@ class GestureRouter:
         # sequence checks: zoom in/out
         if prev_gid is not None:
             if self.rules.is_zoom_in(prev_gid, gid) and self.db.ok("zoom_in", self.cfg.debounce_s):
-                self.engine.zoom_in()
+                self.driver.zoom_in()
             if self.rules.is_zoom_out(prev_gid, gid) and self.db.ok("zoom_out", self.cfg.debounce_s):
-                self.engine.zoom_out()
+                self.driver.zoom_out()
 
         # release gesture (hard reset of buttons/modes)
-        if gid == self.engine.GestureId.RELEASE:
-            self.engine.release_all(clicks, modes)
+        if gid == self.driver.GestureId.RELEASE:
+            self.driver.release_all(clicks, modes)
             self._update_history(hist, event)
             return
 
         # continuous handlers
-        if gid == self.engine.GestureId.MOVE:
-            self.engine.pointer_move(event)
+        if gid == self.driver.GestureId.MOVE:
+            self.driver.pointer_move(event)
 
-        elif gid == self.engine.GestureId.DRAG_SCROLL:
+        elif gid == self.driver.GestureId.DRAG_SCROLL:
             # decide drag vs scroll
             decision = self.rules.axis_dominance(dx, dy, self.cfg.axis_ratio, self.cfg.motion_thresh)
-            self.engine.drag_scroll(event, hist, decision, modes, clicks, self.db, self.cfg)
+            self.driver.drag_scroll(event, hist, decision, modes, clicks, self.db, self.cfg)
 
-        elif gid == self.engine.GestureId.TAB_SHIFT:
+        elif gid == self.driver.GestureId.TAB_SHIFT:
             direction = self.rules.tab_flick(dx, self.cfg.tab_flick_thresh)
             if direction != 0 and self.db.ok(f"tab_{direction}", self.cfg.debounce_s):
-                self.engine.tab_shift(direction)
+                self.driver.tab_shift(direction)
 
-        elif gid == self.engine.GestureId.LCLICK:
-            self.engine.click_left_down(clicks)
+        elif gid == self.driver.GestureId.LCLICK:
+            self.driver.click_left_down(clicks)
 
-        elif gid == self.engine.GestureId.RCLICK:
-            self.engine.click_right_down(clicks)
+        elif gid == self.driver.GestureId.RCLICK:
+            self.driver.click_right_down(clicks)
 
-        elif gid == self.engine.GestureId.HANDWRITE:
-            if prev_gid != self.engine.GestureId.HANDWRITE:
-                self.engine.handwriting_enter(modes, clicks)
-            self.engine.handwriting_update(event)
+        elif gid == self.driver.GestureId.HANDWRITE:
+            if prev_gid != self.driver.GestureId.HANDWRITE:
+                self.driver.handwriting_enter(modes, clicks)
+            self.driver.handwriting_update(event)
 
         # mode exits
-        if prev_gid == self.engine.GestureId.DRAG_SCROLL and gid != self.engine.GestureId.DRAG_SCROLL:
-            self.engine.drag_scroll_exit(modes, clicks)
+        if prev_gid == self.driver.GestureId.DRAG_SCROLL and gid != self.driver.GestureId.DRAG_SCROLL:
+            self.driver.drag_scroll_exit(modes, clicks)
 
-        if prev_gid == self.engine.GestureId.HANDWRITE and gid != self.engine.GestureId.HANDWRITE:
-            self.engine.handwriting_exit(modes, clicks)
+        if prev_gid == self.driver.GestureId.HANDWRITE and gid != self.driver.GestureId.HANDWRITE:
+            self.driver.handwriting_exit(modes, clicks)
 
         # update history
         self._update_history(hist, event)
