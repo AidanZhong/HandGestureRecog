@@ -12,6 +12,8 @@ from dataclasses import dataclass
 from typing import Optional
 
 from hand_gesture_control.actions.os_driver import OSDriver
+from hand_gesture_control.config.constants import DEADZONE_EPS, FRAME_WIDTH, FRAME_HEIGHT, MOVING_SCALE
+from hand_gesture_control.core.filters import apply_deadzone
 from hand_gesture_control.core.state import History
 from hand_gesture_control.core.types import GestureId, GestureEvent
 from hand_gesture_control.mapping.rules import Rules
@@ -35,18 +37,17 @@ class GestureRouter:
       5) update history
     """
 
-    def __init__(self, driver: OSDriver, rules: Rules, debouncer, cfg: RouterConfig = RouterConfig()):
+    def __init__(self, driver: OSDriver, debouncer, cfg: RouterConfig = RouterConfig()):
         """
         driver: Action driver facade (actions/driver.py)
         rules:  module/object exposing axis_dominance, is_zoom_in, is_zoom_out, tab_flick
         debouncer: Debouncer instance
         """
         self.driver = driver
-        self.rules = rules
         self.db = debouncer
         self.cfg = cfg
 
-    def handle(self, event: GestureEvent, hist: History, modes, clicks):
+    def handle(self, event: GestureEvent, hist: History, modes, clicks, ema):
         """
         event: GestureEvent
         hist:  History
@@ -67,9 +68,9 @@ class GestureRouter:
 
         # sequence checks: zoom in/out
         if prev_gid is not None:
-            if self.rules.is_zoom_in(prev_gid, gid) and self.db.ok("zoom_in", self.cfg.debounce_s):
+            if Rules.is_zoom_in(prev_gid, gid) and self.db.ok("zoom_in", self.cfg.debounce_s):
                 self.driver.zoom_in()
-            if self.rules.is_zoom_out(prev_gid, gid) and self.db.ok("zoom_out", self.cfg.debounce_s):
+            if Rules.is_zoom_out(prev_gid, gid) and self.db.ok("zoom_out", self.cfg.debounce_s):
                 self.driver.zoom_out()
 
         # release gesture (hard reset of buttons/modes)
@@ -80,16 +81,27 @@ class GestureRouter:
 
         # continuous handlers
         if gid == GestureId.MOVE:
-            # calculate the dx and dy
-            dx, dy = event.pos.delta(hist.prev_pos)
-            self.driver.move(dx, dy)
+            if hist.prev_pos is not None:
+                # calculate the dx and dy
+                dx, dy = event.pos.delta(hist.prev_pos)
+                dx, dy = apply_deadzone(dx, dy, DEADZONE_EPS)
+                if not dx == dy == 0.0:
+                    smoothed_dx, smoothed_dy = ema.step(
+                        dx * FRAME_WIDTH * MOVING_SCALE,
+                        dy * FRAME_HEIGHT * MOVING_SCALE)
+                    self.driver.move(smoothed_dx, smoothed_dy)
+                    print('----------------')
+                    print(dx, dy)
+                    print(event.pos.x * FRAME_WIDTH * MOVING_SCALE, event.pos.y * FRAME_HEIGHT * MOVING_SCALE)
+                    print(smoothed_dx, smoothed_dy)
 
         elif gid == GestureId.DRAG_SCROLL:
-            dx, dy = event.pos.delta(hist.prev_pos)
-            self.driver.scroll(dx, dy)
+            if hist.prev_pos is not None:
+                dx, dy = event.pos.delta(hist.prev_pos)
+                self.driver.scroll(dx, dy)
 
         elif gid == GestureId.TAB_SHIFT:
-            direction = self.rules.tab_flick(dx, self.cfg.tab_flick_thresh)
+            direction = Rules.tab_flick(dx, self.cfg.tab_flick_thresh)
             if direction != 0 and self.db.ok(f"tab_{direction}", self.cfg.debounce_s):
                 self.driver.tab_shift(direction)
 

@@ -20,10 +20,11 @@ from core.timing import Debouncer
 from core.state import PointerState, ClickState, ModeState, History
 from hand_gesture_control.actions.os_driver import OSDriver
 from hand_gesture_control.actions.os_driver_impl.WindowsDriver import WindowsDriver
+from hand_gesture_control.config.constants import EMA_ALPHA
+from hand_gesture_control.core.filters import EMA
 from hand_gesture_control.input.device_probe import open_camera
 from hand_gesture_control.input.stream_adapter import AdapterConfig, StreamAdapter
 from mapping.router import GestureRouter, RouterConfig
-import mapping.rules as rules
 import mediapipe as mp
 from ui.overlay import OverlayHUD
 
@@ -100,7 +101,7 @@ def build_app():
     # 2) Adapter config
     adapter_cfg = AdapterConfig(
         expect_pixels=True,
-        mirror_x=True
+        mirror_x=False
     )
     adapter = StreamAdapter(adapter_cfg)
 
@@ -112,7 +113,7 @@ def build_app():
         debounce_s=0.35
     )
     debouncer = Debouncer()
-    router = GestureRouter(driver=driver, rules=rules, debouncer=debouncer, cfg=router_cfg)
+    router = GestureRouter(driver=driver, debouncer=debouncer, cfg=router_cfg)
 
     # 4) UI
     hud = OverlayHUD()
@@ -122,12 +123,15 @@ def build_app():
     modes = ModeState(drag_mode=False, draw_mode=False, armed=False)
     clicks = ClickState(left_down=False, right_down=False)
 
-    return driver, adapter, router, hud, hist, modes, clicks
+    # 6) EMA
+    ema = EMA(EMA_ALPHA)
+
+    return driver, adapter, router, hud, hist, modes, clicks, ema
 
 
 def main():
     cfg = AppConfig()
-    driver, adapter, router, hud, hist, modes, clicks = build_app()
+    driver, adapter, router, hud, hist, modes, clicks, ema = build_app()
     detector = Detector()
 
     try:
@@ -140,7 +144,7 @@ def main():
             event = adapter.to_event(det_out)
 
             # Route and act
-            result = router.handle(event, hist, modes, clicks)
+            result = router.handle(event, hist, modes, clicks, ema)
             dx, dy = (0.0, 0.0)
             if isinstance(result, tuple) and len(result) == 2:
                 dx, dy = result

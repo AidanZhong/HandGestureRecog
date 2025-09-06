@@ -16,7 +16,7 @@ from pynput import keyboard, mouse
 from pynput.keyboard import Controller as KeyController, Key
 from pynput.mouse import Controller as MouseController, Button
 from hand_gesture_control.actions.os_driver import OSDriver
-from hand_gesture_control.config.constants import TAB_SHIFT_LEFT, TAB_SHIFT_RIGHT
+from hand_gesture_control.config.constants import TAB_SHIFT_LEFT, TAB_SHIFT_RIGHT, SCROLL_SCALE
 
 
 class WindowsDriver(OSDriver):
@@ -41,10 +41,10 @@ class WindowsDriver(OSDriver):
     def scroll(self, dx, dy):
         if abs(dx) > abs(dy):
             # scroll horizontally
-            pg.hscroll(dx)
+            pg.hscroll(int(SCROLL_SCALE * dx))
         else:
             # vertical scroll
-            pg.vscroll(dy)
+            pg.vscroll(int(SCROLL_SCALE * dy))
 
     def key_combo(self, keys: List[str]):
         pg.hotkey(*keys)

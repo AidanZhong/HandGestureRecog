@@ -10,6 +10,8 @@ Created on 2025/9/4 12:28
 """
 
 from time import monotonic
+
+from hand_gesture_control.config.constants import FRAME_WIDTH, FRAME_HEIGHT
 from hand_gesture_control.core.types import Position2D, GestureEvent, GestureId
 from dataclasses import dataclass
 from time import monotonic
@@ -18,11 +20,10 @@ from time import monotonic
 @dataclass
 class AdapterConfig:
     expect_pixels: bool = True
-    frame_width: int = 512
-    frame_height: int = 512
+    frame_width: int = FRAME_WIDTH
+    frame_height: int = FRAME_HEIGHT
     mirror_x: bool = True
     roi: tuple = None
-    min_hand_conf: float = 0.6
     id_map: dict = None
 
 

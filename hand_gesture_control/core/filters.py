@@ -13,8 +13,8 @@ Created on 2025/9/4 12:25
 class EMA:
     def __init__(self, alpha: float):
         self.alpha = alpha
-        self.smoothed_x = None
-        self.smoothed_y = None
+        self.smoothed_x = 0
+        self.smoothed_y = 0
         self.initialized = False
 
     def step(self, x, y):
@@ -30,8 +30,8 @@ class EMA:
         return self.smoothed_x, self.smoothed_y
 
     def reset(self):
-        self.smoothed_x = None
-        self.smoothed_y = None
+        self.smoothed_x = 0
+        self.smoothed_y = 0
         self.initialized = False
 
 

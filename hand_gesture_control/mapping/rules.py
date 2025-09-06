@@ -13,13 +13,16 @@ from hand_gesture_control.core.types import GestureId
 
 
 class Rules:
-    def is_zoom_in(self, prev, cur) -> bool:
+    @staticmethod
+    def is_zoom_in(prev, cur) -> bool:
         return prev == GestureId.ZOOM and cur == GestureId.RELEASE
 
-    def is_zoom_out(self, prev, cur) -> bool:
+    @staticmethod
+    def is_zoom_out(prev, cur) -> bool:
         return prev == GestureId.RELEASE and cur == GestureId.ZOOM
 
-    def tab_flick(self, dx, threshold=0.03):
+    @staticmethod
+    def tab_flick(dx, threshold=0.03):
         if abs(dx) < threshold:
             return
         if dx < 0:
