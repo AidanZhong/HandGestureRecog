@@ -11,6 +11,11 @@ Created on 2025/9/4 12:29
 from dataclasses import dataclass
 from typing import Optional
 
+from hand_gesture_control.actions.os_driver import OSDriver
+from hand_gesture_control.core.state import History
+from hand_gesture_control.core.types import GestureId, GestureEvent
+from hand_gesture_control.mapping.rules import Rules
+
 
 @dataclass
 class RouterConfig:
@@ -18,6 +23,7 @@ class RouterConfig:
     motion_thresh: float = 0.02
     axis_ratio: float = 1.3
     debounce_s: float = 0.35
+
 
 class GestureRouter:
     """
@@ -28,7 +34,8 @@ class GestureRouter:
       4) mode exits
       5) update history
     """
-    def __init__(self, driver, rules, debouncer, cfg: RouterConfig = RouterConfig()):
+
+    def __init__(self, driver: OSDriver, rules: Rules, debouncer, cfg: RouterConfig = RouterConfig()):
         """
         driver: Action driver facade (actions/driver.py)
         rules:  module/object exposing axis_dominance, is_zoom_in, is_zoom_out, tab_flick
@@ -39,7 +46,7 @@ class GestureRouter:
         self.db = debouncer
         self.cfg = cfg
 
-    def handle(self, event, hist, modes, clicks):
+    def handle(self, event: GestureEvent, hist: History, modes, clicks):
         """
         event: GestureEvent
         hist:  History
@@ -54,9 +61,9 @@ class GestureRouter:
 
         # Compute motion deltas in normalized space
         dx = dy = 0.0
-        if hist.prev_pose is not None:
-            dx = event.pos.x - hist.prev_pose.x
-            dy = event.pos.y - hist.prev_pose.y
+        if hist.prev_pos is not None:
+            dx = event.pos.x - hist.prev_pos.x
+            dy = event.pos.y - hist.prev_pos.y
 
         # sequence checks: zoom in/out
         if prev_gid is not None:
@@ -66,42 +73,37 @@ class GestureRouter:
                 self.driver.zoom_out()
 
         # release gesture (hard reset of buttons/modes)
-        if gid == self.driver.GestureId.RELEASE:
-            self.driver.release_all(clicks, modes)
+        if gid == GestureId.RELEASE:
+            self.driver.release_all()
             self._update_history(hist, event)
             return
 
         # continuous handlers
-        if gid == self.driver.GestureId.MOVE:
-            self.driver.pointer_move(event)
+        if gid == GestureId.MOVE:
+            # calculate the dx and dy
+            dx, dy = event.pos.delta(hist.prev_pos)
+            self.driver.move(dx, dy)
 
-        elif gid == self.driver.GestureId.DRAG_SCROLL:
-            # decide drag vs scroll
-            decision = self.rules.axis_dominance(dx, dy, self.cfg.axis_ratio, self.cfg.motion_thresh)
-            self.driver.drag_scroll(event, hist, decision, modes, clicks, self.db, self.cfg)
+        elif gid == GestureId.DRAG_SCROLL:
+            dx, dy = event.pos.delta(hist.prev_pos)
+            self.driver.scroll(dx, dy)
 
-        elif gid == self.driver.GestureId.TAB_SHIFT:
+        elif gid == GestureId.TAB_SHIFT:
             direction = self.rules.tab_flick(dx, self.cfg.tab_flick_thresh)
             if direction != 0 and self.db.ok(f"tab_{direction}", self.cfg.debounce_s):
                 self.driver.tab_shift(direction)
 
-        elif gid == self.driver.GestureId.LCLICK:
-            self.driver.click_left_down(clicks)
+        elif gid == GestureId.LCLICK:
+            self.driver.press_left()
 
-        elif gid == self.driver.GestureId.RCLICK:
-            self.driver.click_right_down(clicks)
+        elif gid == GestureId.RCLICK:
+            self.driver.press_right()
 
-        elif gid == self.driver.GestureId.HANDWRITE:
-            if prev_gid != self.driver.GestureId.HANDWRITE:
-                self.driver.handwriting_enter(modes, clicks)
-            self.driver.handwriting_update(event)
-
-        # mode exits
-        if prev_gid == self.driver.GestureId.DRAG_SCROLL and gid != self.driver.GestureId.DRAG_SCROLL:
-            self.driver.drag_scroll_exit(modes, clicks)
-
-        if prev_gid == self.driver.GestureId.HANDWRITE and gid != self.driver.GestureId.HANDWRITE:
-            self.driver.handwriting_exit(modes, clicks)
+        elif gid == GestureId.HANDWRITE:
+            pass
+            # if prev_gid != GestureId.HANDWRITE:
+            #     self.driver.handwriting_enter(modes, clicks)
+            # self.driver.handwriting_update(event)
 
         # update history
         self._update_history(hist, event)

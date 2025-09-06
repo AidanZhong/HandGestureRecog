@@ -17,9 +17,9 @@ from time import monotonic
 
 @dataclass
 class AdapterConfig:
-    expect_pixels: bool = False
-    frame_width: int = 1280
-    frame_height: int = 720
+    expect_pixels: bool = True
+    frame_width: int = 512
+    frame_height: int = 512
     mirror_x: bool = True
     roi: tuple = None
     min_hand_conf: float = 0.6

@@ -19,6 +19,7 @@ import numpy as np
 from core.timing import Debouncer
 from core.state import PointerState, ClickState, ModeState, History
 from hand_gesture_control.actions.os_driver import OSDriver
+from hand_gesture_control.actions.os_driver_impl.WindowsDriver import WindowsDriver
 from hand_gesture_control.input.device_probe import open_camera
 from hand_gesture_control.input.stream_adapter import AdapterConfig, StreamAdapter
 from mapping.router import GestureRouter, RouterConfig
@@ -52,6 +53,7 @@ class Detector:
         results = self.mp_hands.process(image_rgb)
 
         hands = []
+        wrist_pos = []
         if results.multi_hand_landmarks:
             for hand_landmarks in results.multi_hand_landmarks:
                 coordinates = []
@@ -61,6 +63,9 @@ class Detector:
                     coordinates.append((x, y))
 
                     # draw it on the image
+                    if idx == 0:
+                        # applying wrist as the position of the hand
+                        wrist_pos = [x, y]
                     cv2.circle(frame, (x, y), 5, (255, 0, 0), cv2.FILLED)
                     cv2.putText(frame, str(idx), (x + 5, y - 5), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 0, 0), 1)
 
@@ -72,8 +77,8 @@ class Detector:
 
         preds = model.predict(np.array(hands))
         res = dict()
-        res['hands'] = hands[0]
-        res['gesture'] = preds[0]
+        res['hands'] = wrist_pos
+        res['gesture'] = preds[0] + 1
         res['t'] = monotonic()
 
         return res
@@ -90,14 +95,12 @@ class AppConfig:
 
 def build_app():
     # 1) Actions driver (with OS driver & controllers inside)
-    driver = OSDriver()  # make sure it exposes .GestureId enum
+    driver = WindowsDriver()
 
     # 2) Adapter config
     adapter_cfg = AdapterConfig(
-        expect_pixels=False,
-        mirror_x=True,
-        roi=None,
-        min_hand_conf=0.6
+        expect_pixels=True,
+        mirror_x=True
     )
     adapter = StreamAdapter(adapter_cfg)
 
@@ -124,14 +127,14 @@ def build_app():
 
 def main():
     cfg = AppConfig()
-    engine, adapter, router, hud, hist, modes, clicks = build_app()
+    driver, adapter, router, hud, hist, modes, clicks = build_app()
     detector = Detector()
 
     try:
         while True:
             frame, det_out = detector.next_frame()
-            if frame is None:
-                break
+            if frame is None or det_out is None:
+                continue
 
             # Adapt detector output → GestureEvent (or None)
             event = adapter.to_event(det_out)
@@ -155,7 +158,7 @@ def main():
                 break
 
         # safety on exit, ensure all buttons released
-        engine.release_all(clicks, modes)
+        driver.release_all()
 
     finally:
         detector.release()

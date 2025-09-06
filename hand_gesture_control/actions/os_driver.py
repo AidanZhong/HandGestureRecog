@@ -34,7 +34,7 @@ class OSDriver(ABC):
         pass
 
     @abstractmethod
-    def scroll(self, ticks):
+    def scroll(self, dx, dy):
         pass
 
     @abstractmethod
@@ -42,9 +42,17 @@ class OSDriver(ABC):
         pass
 
     @abstractmethod
-    def zoom_in(self, amount):
+    def zoom_in(self, amount=10):
         pass
 
     @abstractmethod
-    def zoom_out(self, amount):
+    def zoom_out(self, amount=10):
+        pass
+
+    @abstractmethod
+    def release_all(self):
+        pass
+
+    @abstractmethod
+    def tab_shift(self, direction):
         pass
