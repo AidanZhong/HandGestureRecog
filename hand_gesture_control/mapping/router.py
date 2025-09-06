@@ -90,10 +90,6 @@ class GestureRouter:
                         dx * FRAME_WIDTH * MOVING_SCALE,
                         dy * FRAME_HEIGHT * MOVING_SCALE)
                     self.driver.move(smoothed_dx, smoothed_dy)
-                    print('----------------')
-                    print(dx, dy)
-                    print(event.pos.x * FRAME_WIDTH * MOVING_SCALE, event.pos.y * FRAME_HEIGHT * MOVING_SCALE)
-                    print(smoothed_dx, smoothed_dy)
 
         elif gid == GestureId.DRAG_SCROLL:
             if hist.prev_pos is not None:
