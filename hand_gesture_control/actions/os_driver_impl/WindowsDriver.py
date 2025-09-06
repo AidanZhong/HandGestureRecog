@@ -21,6 +21,7 @@ from hand_gesture_control.config.constants import TAB_SHIFT_LEFT, TAB_SHIFT_RIGH
 
 class WindowsDriver(OSDriver):
     def __init__(self):
+        pg.FAILSAFE = False
         pass
 
     def move(self, px, py):
