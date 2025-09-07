@@ -47,7 +47,7 @@ class GestureRouter:
         self.db = debouncer
         self.cfg = cfg
 
-    def handle(self, event: GestureEvent, hist: History, modes, clicks:ClickState, ema):
+    def handle(self, event: GestureEvent, hist: History, modes, clicks: ClickState, ema):
         """
         event: GestureEvent
         hist:  History

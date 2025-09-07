@@ -8,15 +8,15 @@ Created on 2025/9/4 12:41
 @description: 
 - Python 
 """
-import pyautogui
+import pyautogui as pg
 from pynput.mouse import Controller as MouseController, Button
 
 
 def test_left_click():
-    # pyautogui.mouseDown(button=pyautogui.RIGHT)
-    MouseController().release(Button.right)
-    MouseController().release(Button.right)
-    pyautogui.click(x=1575, y=980)
+    pg.mouseDown(button=pg.LEFT)
+    pg.moveRel(100, 100)
+    pg.mouseUp(button=pg.LEFT)
+    pg.moveRel(-50, -50)
 
 def test_position():
-    print(pyautogui.position())
+    print(pg.position())
