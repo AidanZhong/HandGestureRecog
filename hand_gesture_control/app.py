@@ -133,6 +133,8 @@ def main():
     cfg = AppConfig()
     driver, adapter, router, hud, hist, modes, clicks, ema = build_app()
     detector = Detector()
+    cv2.namedWindow(cfg.window_name, cv2.WINDOW_NORMAL)
+    cv2.setWindowProperty(cfg.window_name, cv2.WND_PROP_TOPMOST, 1)
 
     try:
         while True:
@@ -155,8 +157,9 @@ def main():
                 frame = hud.draw(frame, gesture_label,
                                  active=modes.drag_mode or modes.draw_mode or clicks.left_down or clicks.right_down,
                                  dx=dx, dy=dy)
-
+            cv2.setWindowProperty(cfg.window_name, cv2.WND_PROP_TOPMOST, 1)
             cv2.imshow(cfg.window_name, frame)
+
             key = cv2.waitKey(1) & 0xFF
             if key == 27:  # ESC to quit
                 break

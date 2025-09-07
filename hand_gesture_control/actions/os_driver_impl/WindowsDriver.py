@@ -10,6 +10,7 @@ Created on 2025/9/4 22:42
 """
 import ctypes
 import string
+import time
 from typing import List
 
 import pyautogui as pg
@@ -58,14 +59,16 @@ class WindowsDriver(OSDriver):
     def key_combo(self, keys: List[str]):
         pg.hotkey(*keys)
 
-    def zoom_in(self, amount=10):
+    def zoom_in(self, amount=100):
         pg.keyDown('ctrl')
         pg.scroll(amount)
+        time.sleep(1)
         pg.keyUp('ctrl')
 
-    def zoom_out(self, amount=10):
+    def zoom_out(self, amount=100):
         pg.keyDown('ctrl')
         pg.scroll(-amount)
+        time.sleep(1)
         pg.keyUp('ctrl')
 
     def release_all(self):
