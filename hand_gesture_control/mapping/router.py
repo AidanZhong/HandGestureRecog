@@ -14,7 +14,7 @@ from typing import Optional
 from hand_gesture_control.actions.os_driver import OSDriver
 from hand_gesture_control.config.constants import DEADZONE_EPS, FRAME_WIDTH, FRAME_HEIGHT, MOVING_SCALE
 from hand_gesture_control.core.filters import apply_deadzone
-from hand_gesture_control.core.state import History
+from hand_gesture_control.core.state import History, ClickState
 from hand_gesture_control.core.types import GestureId, GestureEvent
 from hand_gesture_control.mapping.rules import Rules
 
@@ -47,7 +47,7 @@ class GestureRouter:
         self.db = debouncer
         self.cfg = cfg
 
-    def handle(self, event: GestureEvent, hist: History, modes, clicks, ema):
+    def handle(self, event: GestureEvent, hist: History, modes, clicks:ClickState, ema):
         """
         event: GestureEvent
         hist:  History
@@ -76,6 +76,10 @@ class GestureRouter:
         # release gesture (hard reset of buttons/modes)
         if gid == GestureId.RELEASE:
             # self.driver.release_all()
+            if clicks.left_down:
+                self.driver.release_left()
+            if clicks.right_down:
+                self.driver.release_right()
             self._update_history(hist, event)
             return
 
@@ -102,10 +106,24 @@ class GestureRouter:
                 self.driver.tab_shift(direction)
 
         elif gid == GestureId.LCLICK:
-            self.driver.press_left()
+            # make sure it can drag
+            if hist.prev_gesture == GestureId.LCLICK:
+                if hist.prev_pos is not None:
+                    # calculate the dx and dy
+                    dx, dy = event.pos.delta(hist.prev_pos)
+                    dx, dy = apply_deadzone(dx, dy, DEADZONE_EPS)
+                    if not dx == dy == 0.0:
+                        smoothed_dx, smoothed_dy = ema.step(
+                            dx * FRAME_WIDTH * MOVING_SCALE,
+                            dy * FRAME_HEIGHT * MOVING_SCALE)
+                        self.driver.move(smoothed_dx, smoothed_dy)
+            else:
+                self.driver.press_left()
+                clicks.left_down = True
 
         elif gid == GestureId.RCLICK:
             self.driver.press_right()
+
 
         elif gid == GestureId.HANDWRITE:
             pass

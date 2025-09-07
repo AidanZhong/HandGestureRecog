@@ -30,6 +30,10 @@ class OSDriver(ABC):
         pass
 
     @abstractmethod
+    def hard_left_click(self):
+        pass
+
+    @abstractmethod
     def release_right(self):
         pass
 
