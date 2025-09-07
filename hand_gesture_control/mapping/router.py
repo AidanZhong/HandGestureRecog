@@ -75,7 +75,7 @@ class GestureRouter:
 
         # release gesture (hard reset of buttons/modes)
         if gid == GestureId.RELEASE:
-            self.driver.release_all()
+            # self.driver.release_all()
             self._update_history(hist, event)
             return
 
@@ -98,7 +98,7 @@ class GestureRouter:
 
         elif gid == GestureId.TAB_SHIFT:
             direction = Rules.tab_flick(dx, self.cfg.tab_flick_thresh)
-            if direction != 0 and self.db.ok(f"tab_{direction}", self.cfg.debounce_s):
+            if direction is not None and self.db.ok(f"tab_{direction}", self.cfg.debounce_s):
                 self.driver.tab_shift(direction)
 
         elif gid == GestureId.LCLICK:
