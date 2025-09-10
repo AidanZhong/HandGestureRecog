@@ -138,6 +138,7 @@ def main():
 
     try:
         while True:
+            start_time_stamp = monotonic()
             frame, det_out = detector.next_frame()
             if frame is None or det_out is None:
                 continue
@@ -159,6 +160,9 @@ def main():
                                  dx=dx, dy=dy)
             cv2.setWindowProperty(cfg.window_name, cv2.WND_PROP_TOPMOST, 1)
             cv2.imshow(cfg.window_name, frame)
+            end_time_stamp = monotonic()
+
+            print(f'gesture: {event.gesture.name} used {end_time_stamp - start_time_stamp} seconds')
 
             key = cv2.waitKey(1) & 0xFF
             if key == 27:  # ESC to quit
