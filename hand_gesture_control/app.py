@@ -27,6 +27,14 @@ from hand_gesture_control.input.stream_adapter import AdapterConfig, StreamAdapt
 from mapping.router import GestureRouter, RouterConfig
 import mediapipe as mp
 from ui.overlay import OverlayHUD
+import logging
+
+logging.basicConfig(
+    filename='app.log',
+    level=logging.INFO,
+    format='%(asctime)s - %(levelname)s - %(message)s',
+    datefmt='%Y-%m-%d %H:%M:%S'
+)
 
 
 class Detector:
@@ -162,8 +170,7 @@ def main():
             cv2.imshow(cfg.window_name, frame)
             end_time_stamp = monotonic()
 
-            print(f'gesture: {event.gesture.name} used {end_time_stamp - start_time_stamp} seconds')
-
+            logging.info(f'gesture: {event.gesture.name} used {end_time_stamp - start_time_stamp} seconds')
             key = cv2.waitKey(1) & 0xFF
             if key == 27:  # ESC to quit
                 break
